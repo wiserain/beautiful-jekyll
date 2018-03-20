@@ -664,9 +664,12 @@ table tr td :last-child {
 
 /* --- Code blocks --- */
 
+code, pre {
+  font-family: Menlo, 'Ubuntu Mono', Monaco, 'Spoqa Han Sans', monospace;
+}
 pre {
-  font-size: 16px;
-  line-height: 1.5em;
+  font-size: 15px;
+  line-height: 1.4em;
 }
 pre code {
   white-space: pre;
@@ -675,7 +678,7 @@ pre.highlight, .highlight > pre, td.code pre {
   background-color: #FAFAFA;
   background-image: linear-gradient(#F9F9F9 50%, #FDFDFD 50%);
   background-repeat: repeat;
-  background-size: 3em 3em;
+  background-size: 2.8em 2.8em;
   background-position: 0px 10px;
   border-left: 7px solid #444;
 }
