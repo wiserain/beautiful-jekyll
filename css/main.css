@@ -7,7 +7,8 @@ layout: null
 /* --- General --- */
 
 body {
-  font-family: 'Lora', 'Times New Roman', serif;
+  /*font-family: 'Lora', 'Times New Roman', serif;*/
+  font-family: 'Spoqa Han Sans', 'Source Sans Pro', Apple SD Gothic Neo, Nanum Barun Gothic, Nanum Gothic, Verdana, Arial, Dotum, serif, sans-serif;
   font-size: 18px;
   color: #404040;
   position: relative;
@@ -24,6 +25,7 @@ p {
 h1,h2,h3,h4,h5,h6 {
   font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-weight: 800;
+  margin-top: 40px;
 }
 a {
   color: {{ site.link-col }};
@@ -290,6 +292,7 @@ footer .copyright {
   margin-bottom: 0;
 }
 footer .theme-by {
+  font-family: 'Lora', 'Times New Roman', serif;
   text-align: center;
   margin: 10px 0 0;
 }
@@ -349,6 +352,7 @@ footer .theme-by {
   font-size: 18px;
   font-style: italic;
   margin: 0 0 10px;
+  font-family: 'Lora', 'Times New Roman', serif;
 }
 .post-preview .post-entry {
   font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -391,6 +395,7 @@ footer .theme-by {
   font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   color: #999;
   font-size: 15px;
+  margin-top: 30px;
   margin-bottom: 30px;
 }
 
