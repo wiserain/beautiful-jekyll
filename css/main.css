@@ -749,6 +749,19 @@ td.gutter {
   background-color: rgba(0, 0, 0, 0.2);
 }
 
+/* Archive page */
+
+span.archive-list-post-date {
+  font-family: 'Lora', 'Times New Roman', serif;
+  color: #808080;
+  font-style: italic;
+  font-size: 16px;
+}
+
+.archive-list-post {
+  margin: 0 auto 0 1.1em;
+}
+
 /* Tags page */
 
 .tag-index ul  {
