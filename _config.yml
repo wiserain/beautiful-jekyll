@@ -4,8 +4,8 @@
 # baseurl is the website's URL without the hostname
 
 # If you are building a simple GitHub user page (http://username.github.io) then use these settings:
-url: "http://username.github.io"
-baseurl: ""
+url: "https://wiserain.com"
+baseurl: "/beautiful-jekyll"
 
 # If you are building a GitHub project page then use these settings:
 #url: "http://username.github.io/projectname"
@@ -23,6 +23,9 @@ description: A virtual proof that name is awesome!
 
 # List of links in the navigation bar
 navbar-links:
+  Articles: "index.html"
+  Archive: "archive"
+  Tags: "tags"
   About Me: "aboutme"
   Resources:
     - Beautiful Jekyll: "http://deanattali.com/beautiful-jekyll/"
@@ -139,7 +142,7 @@ title-separator: "-"
 timezone: "America/Vancouver"
 markdown: kramdown
 highlighter: rouge
-permalink: /:year-:month-:day-:title/
+permalink: /:categories/:title/
 paginate: 5
 
 kramdown:
@@ -149,10 +152,11 @@ kramdown:
 defaults:
   -
     scope:
-      path: ""
+      path: "_posts"
       type: "posts"
     values:
       layout: "post"
+      category: articles
       comments: true  # add comments to all blog posts
       social-share: true # add social media sharing buttons to all blog posts
   -
