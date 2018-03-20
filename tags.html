@@ -10,9 +10,21 @@ title: 'Tag Index'
 {%- endcapture -%}
 {%- assign tags_list = site_tags | split:',' | sort -%}
 
-{%- for tag in tags_list -%}
-    <a href="#{{- tag -}}" class="btn btn-primary tag-btn"><i class="fa fa-tag" aria-hidden="true"></i>&nbsp;{{- tag -}}&nbsp;({{site.tags[tag].size}})</a>
-{%- endfor -%}
+<div class="tag-index">
+  <ul>
+    {% for item in (0..site.tags.size) %}
+    {% unless forloop.last %}
+      {% capture this_tag %}{{ tags_list[item] | strip_newlines }}{% endcapture %}
+      <li>
+        <a href="#{{ this_tag }}">
+          <span><i class="fa fa-tag" aria-hidden="true">&nbsp;</i>{{ this_tag }}</span>
+          <span class="count">{{ site.tags[this_tag].size }}</span>
+        </a>
+      </li>
+    {% endunless %}
+    {% endfor %}
+  </ul>
+</div>
 
 <div id="full-tags-list">
 {%- for tag in tags_list -%}
@@ -23,7 +35,7 @@ title: 'Tag Index'
     <div class="post-list">
         {%- for post in site.tags[tag] -%}
             <div class="tag-entry">
-                <a href="{{- site.url -}}{{- post.url -}}">{{- post.title -}}</a>
+                <a href="{{- site.baseurl -}}{{- post.url -}}">{{- post.title -}}</a>
                 <div class="entry-date">
                     <time datetime="{{- post.date | date_to_xmlschema -}}">{{- post.date | date: "%B %d, %Y" -}}</time>
                 </div>
