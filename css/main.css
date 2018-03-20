@@ -751,6 +751,39 @@ td.gutter {
 
 /* Tags page */
 
+.tag-index ul  {
+  padding: 0px;
+}
+.tag-index li:before {
+  content: "";
+}
+.tag-index li {
+  margin: 0;
+  font-size: 1.5rem;
+  display: inline;
+  list-style-type: none;
+  text-transform: lowercase;
+}
+.tag-index a {
+  display: inline-block;
+  margin: 2px 4px 2px 0;
+  color: #ffffff;
+  background-color: #868e96;
+  text-decoration: none;
+  border-radius: 3px;
+}
+.tag-index a:hover {
+  background-color: #495057;
+}
+.tag-index span {
+  float: left;
+  padding: 0.5px 5px;
+}
+.tag-index .count {
+  background-color: #495057;
+  border-radius: 0 3px 3px 0;
+}
+
 .tag-btn {
   margin: 5px;
 }
@@ -768,6 +801,7 @@ td.gutter {
 }
 
 #full-tags-list .tag-entry .entry-date {
+  font-family: 'Lora', 'Times New Roman', serif;
   color: #808080;
   font-style: italic;
   font-size: 16px;
