@@ -1,14 +1,14 @@
 ---
 layout: page
-title: My website
-subtitle: This is where I will tell my friends way too much about me
-use-site-title: true
+#title: My website
+#subtitle: This is where I will tell my friends way too much about me
+#use-site-title: true
 ---
 
 <div class="posts-list">
   {% for post in paginator.posts %}
   <article class="post-preview">
-    <a href="{{ post.url | prepend: site.baseurl }}">
+    <a href="{% if post.link %}{{ post.link }}{% else %}{{ post.url | prepend: site.baseurl }}{% endif %}">
 	  <h2 class="post-title">{{ post.title }}</h2>
 
 	  {% if post.subtitle %}
