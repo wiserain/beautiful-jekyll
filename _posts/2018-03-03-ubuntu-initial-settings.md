@@ -6,14 +6,14 @@ comments: true
 share: false
 ---
 
-## 우분투 설정
+환경은
 
 - 우분투 16.04 server
 
 
 ### 다음 카카오로 저장소 변경
-> https://openwiki.kr/tech/ubuntu_daumkakao_repository
-> http://bloodygale.tistory.com/entry/Ubuntu-%EC%A0%80%EC%9E%A5%EC%86%8C-%EB%B3%80%EA%B2%BD
+- https://openwiki.kr/tech/ubuntu_daumkakao_repository
+- http://bloodygale.tistory.com/entry/Ubuntu-%EC%A0%80%EC%9E%A5%EC%86%8C-%EB%B3%80%EA%B2%BD
 
 ```bash
 sudo cp /etc/apt/sources.list /etc/apt/sources.list.bak
@@ -83,7 +83,7 @@ sudo apt-get install sublime-text
 기타 프로그램
 
 ```bash
-sudo apt-get install landscape-common intel-gpu-tools htop firefox
+sudo apt-get install landscape-common intel-gpu-tools htop firefox docker-compose
 ```
 
 cifs/smb 마운트
@@ -110,7 +110,7 @@ language support가 없다면?
 sudo apt-get install language-selector-gnome
 ```
 
-시스템 설정에서 한글 언어팩을 설치한다. 알아서 기본 폰트와 firefox 언어팩도 설치해 준다.
+시스템 설정 >> language support에서 한글 언어팩을 설치한다. 알아서 기본 폰트와 firefox 언어팩도 설치해 준다.
 
 그런 다음 한글 입력기 설치
 
