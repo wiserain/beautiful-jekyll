@@ -6,6 +6,12 @@ comments: true
 share: false
 ---
 
+### check gpu
+```bash
+sudo update-pciids
+lspci -nn | grep '\[03'
+```
+
 ### nvidia driver, cuda, cuDNN
 > https://gist.github.com/morgangiraud/990cf65dcb27068a4ca6b9db4957acc7
 > https://yunsangq.github.io/articles/2017-02/Ubuntu-16.04(64bit),-CUDA-8.0,-cuDNN-5.1-Install
