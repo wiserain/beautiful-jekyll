@@ -67,7 +67,6 @@ or build the latest by yourself
 > https://think.unblog.ch/xrdp-remote-desktop-auf-linux/
 
 ```bash
-
 #---------------------------------------------------#
 # Step 1 - Download XRDP Binaries...
 #---------------------------------------------------#
@@ -181,9 +180,7 @@ vmversion=$(sudo dmidecode -s system-product-name)
 echo $vmversion
 if [ "$vmversion" = "VirtualBox" ]
 then
-	sudo apt-get -y install xserver-xorg-input-all
-else
-    echo "no additional package needed"
+    sudo apt-get -y install xserver-xorg-input-all
 fi
 
 ```
