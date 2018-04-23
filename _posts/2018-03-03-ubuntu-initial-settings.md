@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "우분투 초기 설정"
+title: "우분투 16.04 초기 설정"
 tags: [ubuntu, 16.04]
 comments: true
 share: false
@@ -8,7 +8,7 @@ share: false
 
 환경은
 
-- 우분투 16.04 server
+- 우분투 16.04 server/desktop
 
 
 ### 다음 카카오로 저장소 변경
@@ -44,10 +44,12 @@ sudo apt-get install mate-core mate-desktop-environment mate-notification-daemon
 ```
 
 ### xrdp
+from official repository
 ```bash
 sudo apt-get install xrdp
 ```
-or
+
+or more recent version from ppa
 > https://netdevops.me/2017/installing-xrdp-0.9.1-on-ubuntu-16.04-xenial/
 
 ```bash
@@ -60,6 +62,131 @@ sudo apt-get install xrdp
 sudo sed -i.bak '/fi/a #xrdp multiple users configuration \n mate-session \n' /etc/xrdp/startwm.sh
 ```
 
+or build the latest by yourself
+> http://c-nergy.be/blog/?p=11719
+> https://think.unblog.ch/xrdp-remote-desktop-auf-linux/
+
+```bash
+
+#---------------------------------------------------#
+# Step 1 - Download XRDP Binaries...
+#---------------------------------------------------#
+
+mkdir ~/git && cd ~/git
+sudo apt-get -y install git
+
+git clone https://github.com/neutrinolabs/xrdp.git
+git clone https://github.com/neutrinolabs/xorgxrdp.git
+
+#---------------------------------------------------#
+# Step 2 - Install Prereqs...
+#---------------------------------------------------#
+
+sudo apt-get -y install libx11-dev libxfixes-dev libssl-dev libpam0g-dev libtool libjpeg-dev flex bison gettext autoconf libxml-parser-perl libfuse-dev xsltproc libxrandr-dev python-libxml2 nasm xserver-xorg-dev fuse
+
+#---------------------------------------------------#
+# Step 3 - Check if Fontutil.h file exists...
+#---------------------------------------------------#
+
+file="/usr/include/X11/fonts/fontutil.h"
+
+if [ ! -f "$file" ]
+then
+cat >/usr/include/X11/fonts/fontutil.h <<EOF
+#ifndef _FONTUTIL_H_
+#define _FONTUTIL_H_
+
+#include <X11/fonts/FSproto.h>
+
+extern int FontCouldBeTerminal(FontInfoPtr);
+extern int CheckFSFormat(fsBitmapFormat, fsBitmapFormatMask, int *, int *,
+    			 int *, int *, int *);
+extern void FontComputeInfoAccelerators(FontInfoPtr);
+
+extern void GetGlyphs ( FontPtr font, unsigned long count,
+    			unsigned char *chars, FontEncoding fontEncoding,
+    			unsigned long *glyphcount, CharInfoPtr *glyphs );
+extern void QueryGlyphExtents ( FontPtr pFont, CharInfoPtr *charinfo,
+    				unsigned long count, ExtentInfoRec *info );
+extern Bool QueryTextExtents ( FontPtr pFont, unsigned long count,
+    			       unsigned char *chars, ExtentInfoRec *info );
+extern Bool ParseGlyphCachingMode ( char *str );
+extern void InitGlyphCaching ( void );
+extern void SetGlyphCachingMode ( int newmode );
+extern int add_range ( fsRange *newrange, int *nranges, fsRange **range,
+    		       Bool charset_subset );
+
+#endif /* _FONTUTIL_H_ */
+EOF
+
+fi
+
+#---------------------------------------------------#
+# Step 4 - compiling...
+#---------------------------------------------------#
+
+cd ~/git/xrdp
+sudo ./bootstrap && \
+sudo ./configure --enable-fuse --enable-jpeg && \
+sudo make -j4
+sudo make install
+
+cd ~/git/xorgxrdp
+sudo ./bootstrap && \
+sudo ./configure && \
+sudo make -j4
+sudo make install
+
+#---------------------------------------------------#
+# Step 5 - create policies exceptions ....
+#---------------------------------------------------#
+
+sudo bash -c "cat >/etc/polkit-1/localauthority.conf.d/02-allow-colord.conf" <<EOF
+
+polkit.addRule(function(action, subject) {
+if ((action.id == “org.freedesktop.color-manager.create-device” ||
+action.id == “org.freedesktop.color-manager.create-profile” ||
+action.id == “org.freedesktop.color-manager.delete-device” ||
+action.id == “org.freedesktop.color-manager.delete-profile” ||
+action.id == “org.freedesktop.color-manager.modify-device” ||
+action.id == “org.freedesktop.color-manager.modify-profile”) &&
+subject.isInGroup(“{users}”)) {
+return polkit.Result.YES;
+}
+});
+EOF
+
+#---------------------------------------------------#
+# Step 6 - configure Xwrapper file  ....
+#---------------------------------------------------#
+
+sudo sed -i 's/allowed_users=console/allowed_users=anybody/' /etc/X11/Xwrapper.config
+
+#---------------------------------------------------#
+# Step 8 - create services ....
+#---------------------------------------------------#
+
+sudo systemctl daemon-reload
+sudo systemctl enable xrdp.service
+sudo systemctl enable xrdp-sesman.service
+sudo systemctl start xrdp
+
+#---------------------------------------------------#
+# Step 9 - install additional pacakge ....
+#---------------------------------------------------#
+
+sudo apt-get -y install xserver-xorg-core
+
+vmversion=$(sudo dmidecode -s system-product-name)
+echo $vmversion
+if [ "$vmversion" = "VirtualBox" ]
+then
+	sudo apt-get -y install xserver-xorg-input-all
+else
+    echo "no additional package needed"
+fi
+
+```
 ### sublimetext 3
 ```bash
 wget -qO - https://download.sublimetext.com/sublimehq-pub.gpg | sudo apt-key add -
@@ -78,6 +205,36 @@ install
 sudo apt-get update
 sudo apt-get install sublime-text
 ```
+
+### error reporting
+> https://askubuntu.com/questions/93457/how-do-i-enable-or-disable-apport
+
+Disable
+```bash
+sudo systemctl disable apport.service
+```
+If that does not work, you would then need to mask the service
+```bash
+systemctl mask apport.service
+```
+To reenable
+```bash
+systemctl unmask apport.service # if you masked it
+sudo systemctl enable apport.service
+```
+
+A file editor is now open. Change enabled from "0" to a "1" so it looks like this:
+```bash
+enabled=1
+```
+To turn it off make it:
+```bash
+enabled=0
+```
+Now save your changes and close the file editor. Apport will now no longer start at boot. If you want to turn it off immediately without rebooting, run ```sudo service apport stop```.
+
+You can also use ```sudo service apport stop``` without modifying ```/etc/default/apport``` to turn it off temporarily.
+
 
 ### misc
 기타 프로그램
