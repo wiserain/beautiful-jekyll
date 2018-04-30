@@ -64,7 +64,10 @@ sudo sed -i.bak '/fi/a #xrdp multiple users configuration \n mate-session \n' /e
 
 or build the latest by yourself
 > http://c-nergy.be/blog/?p=11719
+
 > https://think.unblog.ch/xrdp-remote-desktop-auf-linux/
+
+> https://github.com/neutrinolabs/xrdp/wiki/Building-on-Debian-8
 
 ```bash
 #---------------------------------------------------#
@@ -182,8 +185,8 @@ if [ "$vmversion" = "VirtualBox" ]
 then
     sudo apt-get -y install xserver-xorg-input-all
 fi
-
 ```
+
 ### sublimetext 3
 ```bash
 wget -qO - https://download.sublimetext.com/sublimehq-pub.gpg | sudo apt-key add -

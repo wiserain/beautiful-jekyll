@@ -14,6 +14,7 @@ lspci -nn | grep '\[03'
 
 ### nvidia driver, cuda, cuDNN
 > https://gist.github.com/morgangiraud/990cf65dcb27068a4ca6b9db4957acc7
+
 > https://yunsangq.github.io/articles/2017-02/Ubuntu-16.04(64bit),-CUDA-8.0,-cuDNN-5.1-Install
 
 ```bash
@@ -53,10 +54,27 @@ nvcc --version
 sudo dpkg -i libcudnn7*+cuda9.0_amd64.deb
 ```
 
+You can similarly install cuda 9.1 and its [compaitible](https://stackoverflow.com/questions/30820513/what-is-version-of-cuda-for-nvidia-304-125/30820690#30820690) driver.
+
 ### basic python packages for deep learning
 ```bash
 sudo apt install python-pydot python-pydot-ng graphviz \
   python-matplotlib python-imaging -y
+```
+
+### install tensorflow
+```bash
+sudo pip install tensorflow-gpu
+```
+
+or build yourself
+
+> http://www.python36.com/install-tensorflow141-gpu/
+
+### install keras and keras-contrib
+```bash
+sudo pip install keras
+sudo pip install git+https://www.github.com/keras-team/keras-contrib.git
 ```
 
 ### troubleshooting
@@ -64,9 +82,3 @@ sudo apt install python-pydot python-pydot-ng graphviz \
 > https://github.com/enigmampc/catalyst/issues/39
 
 ```echo "backend: Agg" > ~/.config/matplotlib/matplotlibrc```
-
-### keras-contrib
-
-```bash
-sudo pip install git+https://www.github.com/keras-team/keras-contrib.git
-```
