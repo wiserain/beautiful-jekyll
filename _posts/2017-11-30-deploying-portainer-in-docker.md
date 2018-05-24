@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "docker-portainer 설치"
-tags: [docker, portainer]
+tags: [docker, portainer, remote, REST, api]
 comments: true
 share: true
 ---
@@ -27,7 +27,7 @@ services:
     restart: always
     network_mode: "bridge"
     volumes:
-      - /your/local/portainer/data/path:/data
+      - ${DOCKER_ROOT}/portainer/data:/data
       - /var/run/docker.sock:/var/run/docker.sock
     ports:
       - "9000:9000"
@@ -39,19 +39,24 @@ services:
 
 ```conf
 server {
-	listen 443 ssl http2;
-	server_name <%= domain.name %>;
+    listen 443 ssl http2;
+    server_name <%= domain.name %>;
 
-	ssl on;
-	ssl_certificate <%= domain.chained_cert_path %>;
-	ssl_certificate_key <%= domain.key_path %>;
+    ssl on;
+    ssl_certificate <%= domain.signed_cert_path %>;
+    ssl_certificate_key <%= domain.key_path %>;
 
-	ssl_protocols       TLSv1 TLSv1.1 TLSv1.2;
-	ssl_session_cache shared:SSL:50m;
-	ssl_ciphers ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-SHA384:ECDHE-RSA-AES128-SHA256:ECDHE-RSA-AES256-SHA:ECDHE-RSA-AES128-SHA:DHE-RSA-AES256-SHA:DHE-RSA-AES128-SHA;
-	ssl_prefer_server_ciphers on;
+    ssl_protocols       TLSv1 TLSv1.1 TLSv1.2;
+    ssl_session_cache shared:SSL:50m;
+    ssl_ciphers ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-SHA384:ECDHE-RSA-AES128-SHA256:ECDHE-RSA-AES256-SHA:ECDHE-RSA-AES128-SHA:DHE-RSA-AES256-SHA:DHE-RSA-AES128-SHA;
+    ssl_prefer_server_ciphers on;
 
-	ssl_dhparam <%= dhparam_path %>;
+    ssl_dhparam <%= dhparam_path %>;
+
+    # Prevent Nginx from leaking the first TLS config
+    if ($host != $server_name) {
+        return 444;
+    }
 
     location / {
         proxy_pass  <%= domain.upstream %>/;
@@ -64,9 +69,9 @@ server {
     location /api/websocket/ {
         proxy_pass  <%= domain.upstream %>/api/websocket/;
 
-		proxy_set_header Upgrade $http_upgrade;
-		proxy_set_header Connection "upgrade";
-		proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_http_version 1.1;
         access_log off;
     }
 }
@@ -78,7 +83,6 @@ server {
 
 local의 docker service뿐만 아니라 docker에서 제공하는 Remote API를 통해서 외부의 서비스도 연결할 수 있다. 이를 위해서는 target machine의 docker에서 이걸 허용해줘야 하는데, 이 [gist 문서](https://gist.github.com/jupeter/b39e11521452129af2af85cc855c91d7)와 같이 docker 실행 옵션 ```DOCKER_OPTS``` 을 수정해주면 된다.
 
-그런데 버그인지 우분투에서 적용이 안된다. [여기](http://www.littlebigextra.com/how-to-enable-remote-rest-api-on-docker-host/)를 참고해서 ```/lib/systemd/system/docker.service``` 파일을 수정하면 잘 동작한다. docker service 시작 스크립트에 하드코딩으로 집어 넣는 것이다.
+그런데 버그인지 우분투 16.04에서 적용이 안된다. [여기](http://www.littlebigextra.com/how-to-enable-remote-rest-api-on-docker-host/)나 [여기](https://medium.com/@sudarakayasindu/enabling-and-accessing-docker-engine-api-on-a-remote-docker-host-on-ubuntu-16-04-2c15f55f5d39)를 참고해서 ```/lib/systemd/system/docker.service``` 파일을 수정하면 잘 동작한다. docker service 시작 스크립트에 하드코딩으로 집어 넣는 것이다.
 
 그런 다음 ENDPOINT 메뉴에서 IP:PORT를 등록하면 된다.
-
